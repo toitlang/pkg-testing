@@ -5,7 +5,6 @@ import core.message_manual_decoding_ show print_for_manually_decoding_
 
 logger/log.Logger := log.default.with_name "testing"
 
-
 current_scope_/Scope? := null
 
 scope [block]:
@@ -55,7 +54,7 @@ class Scope:
     encoder := json.Encoder
     events.do:
       encoder.encode it
-    print encoder.to_string
+    print_on_stderr_ encoder.to_string
 
   time_ms_ -> int: return (Time.monotonic_us - start_time_) / 1000
 

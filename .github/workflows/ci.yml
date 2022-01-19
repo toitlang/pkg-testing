@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v2 # checkout the repo
       - run: >
           curl -L https://github.com/toitlang/toit/releases/latest/download/toit-linux.tar.gz | tar -zxf -
-      - run: ./toit/bin/toit.run tests/basic.toit > test-results.json
+      - run: ./toit/bin/toit.run tests/basic.toit 2> test-results.json
       - uses: actions/upload-artifact@v2 # upload test results
         if: success() || failure() # run this step even if previous step failed
         with:

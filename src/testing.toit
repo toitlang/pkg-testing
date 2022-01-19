@@ -51,11 +51,9 @@ class Scope:
       "type": "done",
     }
 
-    encoder := json.Encoder
     events.do:
-      encoder.encode it
-      encoder.put_byte_ '\n'
-    print_on_stderr_ encoder.to_string
+      print_on_stderr_
+        json.stringify it
 
   time_ms_ -> int: return (Time.monotonic_us - start_time_) / 1000
 

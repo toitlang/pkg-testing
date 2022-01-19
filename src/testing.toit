@@ -45,7 +45,7 @@ class Scope:
           "skip":false,
           "skipReason":null
         },
-        "testCount": 2,
+        // "testCount": 2,
       },
     }
 

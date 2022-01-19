@@ -8,7 +8,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2 # checkout the repo
       - run: >
-          curl https://github.com/toitlang/toit/releases/download/toit-linux.tar.gz | tar -xz -
+          curl https://github.com/toitlang/toit/releases/download/toit-linux.tar.gz | tar -xf -
       - run: ls -laR
       # - uses: actions/upload-artifact@v2 # upload test results
       #   if: success() || failure() # run this step even if previous step failed

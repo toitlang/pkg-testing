@@ -21,43 +21,42 @@ class Scope:
   start_time_ := Time.monotonic_us
 
   constructor:
-    events.add {
+    event_ "start" {
       "protocolVersion": "0.1.0",
       "runnerVersion": "1.0.0",
-      "type":"start",
-      "time": (Time.monotonic_us - start_time_) / 1000
     }
 
   start test/Test:
-    events.add {
+    event_ "testStart" {
       "test": {
         "id": test.id,
         "name": test.name,
         "groupIDs": [],
-      },
-      "type":"testStart",
-      "time": time_ms_
+      }
     }
 
   done test/Test:
-    events.add {
+    event_ "testDone" {
       "testID": test.id,
       "result": "success",
-      "type": "testDone",
       "hidden": false,
       "skipped": false,
     }
 
   done:
-    events.add {
+    event_ "done" {
       "result": "success",
-      "type": "done",
       "success": true,
     }
 
     events.do:
       print_on_stderr_
         json.stringify it
+
+  event_ type/string args/Map:
+    args["type"] = type
+    args["time"] = time_ms_
+    events.add args
 
   time_ms_ -> int: return (Time.monotonic_us - start_time_) / 1000
 

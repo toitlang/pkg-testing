@@ -23,7 +23,30 @@ class Scope:
   constructor:
     event_ "start" {
       "protocolVersion": "0.1.0",
-      "runnerVersion": "1.0.0",
+      "runnerVersion": null,
+    }
+    event_ "allSuites" {
+      "count": 1,
+    }
+    event_ "suite" {
+      "suite": {
+        "id": 0,
+        "platform": null,
+        "path": "toit.run"
+      },
+    }
+    event_ "group" {
+      "group":{
+        "id":Test.next_test_id_++,
+        "suiteID":0,
+        "parentID":null,
+        "name":null,
+        "metadata":{
+          "skip":false,
+          "skipReason":null
+        },
+        "testCount": 2,
+      },
     }
 
   start test/Test:
@@ -31,7 +54,8 @@ class Scope:
       "test": {
         "id": test.id,
         "name": test.name,
-        "groupIDs": [],
+        "groupIDs": [1],
+        "suiteID": 0,
       }
     }
 

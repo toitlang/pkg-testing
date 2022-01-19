@@ -17,6 +17,7 @@ scope [block]:
 class Scope:
   tests/List ::= []
   events/List ::= []
+  group_id_ ::= Test.next_test_id_++
 
   start_time_ := Time.monotonic_us
 
@@ -37,15 +38,14 @@ class Scope:
     }
     event_ "group" {
       "group":{
-        "id":Test.next_test_id_++,
-        "suiteID":0,
-        "parentID":null,
-        "name":null,
-        "metadata":{
-          "skip":false,
-          "skipReason":null
+        "id": group_id_,
+        "suiteID": 0,
+        "parentID": null,
+        "name": null,
+        "metadata": {
+          "skip": false,
+          "skipReason": null
         },
-        // "testCount": 2,
       },
     }
 
@@ -54,7 +54,7 @@ class Scope:
       "test": {
         "id": test.id,
         "name": test.name,
-        "groupIDs": [1],
+        "groupIDs": [group_id_],
         "suiteID": 0,
       }
     }

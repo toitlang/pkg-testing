@@ -5,7 +5,6 @@ import core.message_manual_decoding_ show print_for_manually_decoding_
 
 logger/log.Logger := log.default.with_name "testing"
 
-
 current_scope_/Scope? := null
 
 scope [block]:
@@ -18,44 +17,70 @@ scope [block]:
 class Scope:
   tests/List ::= []
   events/List ::= []
+  group_id_ ::= Test.next_test_id_++
 
   start_time_ := Time.monotonic_us
 
   constructor:
-    events.add {
-      "protocolVersion":"0.1.0",
-      "runnerVersion":"1.0",
-      "type":"start",
-      "time": (Time.monotonic_us - start_time_) / 1000
+    event_ "start" {
+      "protocolVersion": "0.1.0",
+      "runnerVersion": null,
+    }
+    event_ "allSuites" {
+      "count": 1,
+    }
+    event_ "suite" {
+      "suite": {
+        "id": 0,
+        "platform": null,
+        "path": "toit.run"
+      },
+    }
+    event_ "group" {
+      "group":{
+        "id": group_id_,
+        "suiteID": 0,
+        "parentID": null,
+        "name": null,
+        "metadata": {
+          "skip": false,
+          "skipReason": null
+        },
+      },
     }
 
   start test/Test:
-    events.add {
+    event_ "testStart" {
       "test": {
         "id": test.id,
         "name": test.name,
-      },
-      "type":"testStart",
-      "time": time_ms_
+        "groupIDs": [group_id_],
+        "suiteID": 0,
+      }
     }
 
   done test/Test:
-    events.add {
+    event_ "testDone" {
       "testID": test.id,
       "result": "success",
-      "type": "testDone",
+      "hidden": false,
+      "skipped": false,
     }
 
   done:
-    events.add {
+    event_ "done" {
       "result": "success",
-      "type": "done",
+      "success": true,
     }
 
-    encoder := json.Encoder
     events.do:
-      encoder.encode it
-    print encoder.to_string
+      print_on_stderr_
+        json.stringify it
+
+  event_ type/string args/Map:
+    args["type"] = type
+    args["time"] = time_ms_
+    events.add args
 
   time_ms_ -> int: return (Time.monotonic_us - start_time_) / 1000
 

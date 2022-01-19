@@ -8,10 +8,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2 # checkout the repo
       - run: >
-          curl https://github.com/toitlang/toit/releases/download/toit-linux.tar.gz | tar -xz -
-      - run: ls -laR
-      # - uses: actions/upload-artifact@v2 # upload test results
-      #   if: success() || failure() # run this step even if previous step failed
-      #   with:
-      #     name: test-results
-      #     path: jest-junit.xml
+          curl -L https://github.com/toitlang/toit/releases/latest/download/toit-linux.tar.gz | tar -zxf -
+      - run: ./toit/bin/toit.run tests/basic.toit 2> test-results.json
+      - uses: actions/upload-artifact@v2 # upload test results
+        if: always()
+        with:
+          name: test-results
+          path: test-results.json
+      - uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          # artifact: test-results # artifact name
+          name: Toit Tests # Name of the check run which will be created
+          path: "*.json" # Path to test results (inside artifact .zip)
+          reporter: dart-json # Format of test results

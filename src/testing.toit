@@ -22,8 +22,8 @@ class Scope:
 
   constructor:
     events.add {
-      "protocolVersion":"0.1.0",
-      "runnerVersion":"1.0",
+      "protocolVersion": "0.1.0",
+      "runnerVersion": "1.0.0",
       "type":"start",
       "time": (Time.monotonic_us - start_time_) / 1000
     }
@@ -33,6 +33,7 @@ class Scope:
       "test": {
         "id": test.id,
         "name": test.name,
+        "groupIDs": [],
       },
       "type":"testStart",
       "time": time_ms_
@@ -43,12 +44,15 @@ class Scope:
       "testID": test.id,
       "result": "success",
       "type": "testDone",
+      "hidden": false,
+      "skipped": false,
     }
 
   done:
     events.add {
       "result": "success",
       "type": "done",
+      "success": true,
     }
 
     events.do:

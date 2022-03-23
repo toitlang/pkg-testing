@@ -1,7 +1,6 @@
 import bytes
 import encoding.json
 import log
-import core.message_manual_decoding_ show print_for_manually_decoding_
 
 logger/log.Logger := log.default.with_name "testing"
 
@@ -12,7 +11,6 @@ scope [block]:
   block.call current_scope_
   current_scope_.done
   current_scope_ = null
-
 
 class Scope:
   tests/List ::= []
@@ -96,7 +94,6 @@ class Test:
   logger_/log.Logger
   expects_/List ::= []
 
-
   constructor .name --logger=logger:
     logger_ = logger.with_tag "name" name
 
@@ -112,7 +109,6 @@ class Test:
       logger_.error "test failed" --tags={"error": error}
     logger_.info "done running test"
     print expects_
-
 
   expect value/bool:
     if not value:
